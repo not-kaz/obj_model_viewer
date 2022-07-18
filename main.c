@@ -10,24 +10,24 @@ int main(void)
 
 	{ // debug printing
 		fprintf(stdout, "\n");
-		for (int i = 0; i < m->vertices.num_positions; i++) {
-			fprintf(stdout, "%f ", m->vertices.position[i]);
+		for (int i = 0; i < m->num_positions; i++) {
+			fprintf(stdout, "%f ", m->positions[i]);
 			if (i % 3 == 2)
 				fprintf(stdout, "\n");
 		}
 
 		fprintf(stdout, "\n");
-		for (int i = 0; i < m->vertices.num_normals; i++) {
-			fprintf(stdout, "%f ", m->vertices.normal[i]);
+		for (int i = 0; i < m->num_normals; i++) {
+			fprintf(stdout, "%f ", m->normals[i]);
 			if (i % 3 == 2)
-				fprintf(stdout, 	"\n");
+				fprintf(stdout, "\n");
 		}
 
 		fprintf(stdout, "\n");
 		for (int i = 0; i < m->num_faces; i++) {
 			fprintf(stdout, "%d//%d ", m->faces[i].v, m->faces[i].n);
 			if (i % 3 == 2)
-				fprintf(stdout, 	"\n");
+				fprintf(stdout, "\n");
 		}
 	}
 

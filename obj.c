@@ -68,15 +68,15 @@ static void strparse(const char *str, struct obj_mesh *m)
 	}
 
 	{ // mem alloc
-		m->vertices.num_positions = 3 * v;
-		m->vertices.num_normals = 3 * n;
-		m->vertices.num_tex_coords = 2 * t;
+		m->num_positions = 3 * v;
+		m->num_normals = 3 * n;
+		m->num_tex_coords = 2 * t;
 		m->num_faces = 3 * f;
 
-		m->vertices.position = malloc(m->vertices.num_positions * sizeof(float));
-		m->vertices.normal = malloc(m->vertices.num_normals * sizeof(float));
-		m->vertices.tex_coord = malloc(m->vertices.num_tex_coords * sizeof(float));
-		m->faces = malloc(m->num_faces * 3 * sizeof(struct obj_mesh_face));
+		m->positions = malloc(m->num_positions * sizeof(float));
+		m->normals = malloc(m->num_normals * sizeof(float));
+		m->tex_coords = malloc(m->num_tex_coords * sizeof(float));
+		m->faces = malloc(m->num_faces * 3 * sizeof(unsigned int));
 	}
 
 	{ // second pass - store data
@@ -88,29 +88,29 @@ static void strparse(const char *str, struct obj_mesh *m)
 				switch (*p++) {
 				case 'n':
 					sscanf(p, " %f %f %f ", // replace sscanf
-						   &m->vertices.normal[n],
-						   &m->vertices.normal[n + 1],
-						   &m->vertices.normal[n + 2]);
+						   &m->normals[n],
+						   &m->normals[n + 1],
+						   &m->normals[n + 2]);
 					n += 3;
 					break;
 				case 't':
 					sscanf(p, " %f %f ",
-						   &m->vertices.normal[t],
-						   &m->vertices.normal[t + 1],
-						   &m->vertices.normal[t + 2]);
+						   &m->normals[t],
+						   &m->normals[t + 1],
+						   &m->normals[t + 2]);
 					t += 2;
 					break;
 				default:
 					sscanf(p, " %f %f %f ",
-						   &m->vertices.position[v],
-						   &m->vertices.position[v + 1],
-						   &m->vertices.position[v + 2]);
+						   &m->positions[v],
+						   &m->positions[v + 1],
+						   &m->positions[v + 2]);
 					v += 3;
 					break;
 				}
 				break;
 			case 'f':
-				sscanf(p, " %d//%d %d//%d %d//%d ",
+				sscanf(p, " %d//%d %d//%d %d//%d ", // need multiple use cases
 					   &m->faces[f].v, &m->faces[f].n,
 					   &m->faces[f + 1].v, &m->faces[f + 1].n,
 					   &m->faces[f + 2].v, &m->faces[f + 2].n);
@@ -151,9 +151,9 @@ struct obj_mesh *obj_mesh_create(const char *filename)
 void obj_mesh_destroy(struct obj_mesh *m)
 {
 	// free members!
-	free(m->vertices.position);
-	free(m->vertices.normal);
-	free(m->vertices.tex_coord);
+	free(m->positions);
+	free(m->normals);
+	free(m->tex_coords);
 	free(m->faces);
 	free(m);
 }
